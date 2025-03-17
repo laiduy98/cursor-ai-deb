@@ -1,0 +1,27 @@
+name: 📅 Schedule Workflow Dispatch
+on:
+  schedule:
+    - cron: '0 0 * * *' # every day
+  workflow_dispatch:
+    inputs:
+      date:
+        description: 'Date to run the workflow'
+        required: true
+        type: string
+        default: 'in 1 hour'
+concurrency:
+  group: schedule${{ github.event.inputs.date }}
+  cancel-in-progress: true
+
+jobs:
+  schedule:
+    name: 📅 Schedule
+    runs-on: ubuntu-latest
+    steps:
+      - uses: austenstone/schedule@v1.3
+        with:
+          github-token: ${{ secrets.SCHEDULE_TOKEN }}
+          date: ${{ github.event.inputs.date }}
+          workflow: 'deb.yml'
+          timezone: 'EU/Paris' # US/Central, US/Pacific
+          wait-ms: 45000
