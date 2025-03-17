@@ -8,5 +8,25 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v2
-      - name: Run script
+
+      - name: build deb package
         run: bash build.sh
+
+      - name: Find the .deb file
+        run: |
+          DEB_FILE=$(find . -type f -name "*.deb" -print -quit)
+          echo "DEB_FILE=$DEB_FILE" >> $GITHUB_ENV
+
+      - name: Upload .deb file as artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: deb-package
+          path: ${{ env.DEB_FILE }}
+
+      - name: Create GitHub Release
+        id: create_release
+        uses: softprops/action-gh-release@v1
+        with:
+          files: ${{ env.DEB_FILE }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
