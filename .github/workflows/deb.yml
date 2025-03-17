@@ -1,0 +1,10 @@
+name: Build Debian Package
+
+on: [push]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Run script
+        run: bash build.sh
