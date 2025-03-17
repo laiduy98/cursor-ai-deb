@@ -36,3 +36,5 @@ jobs:
         with:
           files: ${{ env.DEB_FILE }}
           tag_name: ${{ env.TAG_NAME }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.RELEASE_TOKEN }}
