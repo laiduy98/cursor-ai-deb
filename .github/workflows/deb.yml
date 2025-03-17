@@ -12,10 +12,17 @@ jobs:
       - name: build deb package
         run: bash build.sh
 
-      - name: Find the .deb file
+      - name: Find the .deb file and extract the tag
         run: |
           DEB_FILE=$(find . -type f -name "*.deb" -print -quit)
+          TAG_NAME=$(basename "$DEB_FILE" .deb)  # Remove the .deb extension to use as the tag name
           echo "DEB_FILE=$DEB_FILE" >> $GITHUB_ENV
+          echo "TAG_NAME=$TAG_NAME" >> $GITHUB_ENV
+
+      - name: Create a Git tag (if it doesn't exist)
+        run: |
+          git tag ${{ env.TAG_NAME }} || echo "Tag already exists"
+          git push origin ${{ env.TAG_NAME }} || echo "Tag already pushed"
 
       - name: Upload .deb file as artifact
         uses: actions/upload-artifact@v4
@@ -28,5 +35,6 @@ jobs:
         uses: softprops/action-gh-release@v2
         with:
           files: ${{ env.DEB_FILE }}
+          tag_name: ${{ env.TAG_NAME }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
