@@ -23,5 +23,5 @@ jobs:
           github-token: ${{ secrets.SCHEDULE_TOKEN }}
           date: ${{ github.event.inputs.date }}
           workflow: 'deb.yml'
-          timezone: 'EU/Paris' # US/Central, US/Pacific
+          timezone: 'Europe/Paris' # US/Central, US/Pacific
           wait-ms: 45000
