@@ -149,13 +149,9 @@ else
     ln -sf '/opt/Cursor/cursor' '/usr/bin/cursor'
 fi
 
-# Check if user namespaces are supported by the kernel and working with a quick test:
-if ! { [[ -L /proc/self/ns/user ]] && unshare --user true; }; then
-    # Use SUID chrome-sandbox only on systems without user namespaces:
-    chmod 4755 '/opt/Cursor/chrome-sandbox' || true
-else
-    chmod 0755 '/opt/Cursor/chrome-sandbox' || true
-fi
+# Always set the correct permissions for chrome-sandbox
+chown root:root '/opt/Cursor/chrome-sandbox'
+chmod 4755 '/opt/Cursor/chrome-sandbox'
 
 if hash update-mime-database 2>/dev/null; then
     update-mime-database /usr/share/mime || true
