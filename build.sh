@@ -206,7 +206,7 @@ chmod 755 "$PACKAGE_DIR/DEBIAN/postrm"
 
 # Ensure proper permissions for the application
 chmod 755 "$PACKAGE_DIR/opt/Cursor/cursor"
-chmod 755 "$PACKAGE_DIR/opt/Cursor/chrome-sandbox"
+chmod 4755 "$PACKAGE_DIR/opt/Cursor/chrome-sandbox"
 chmod 755 "$PACKAGE_DIR/opt/Cursor/chrome_crashpad_handler"
 find "$PACKAGE_DIR/opt/Cursor" -name "*.so*" -exec chmod 755 {} \;
 
