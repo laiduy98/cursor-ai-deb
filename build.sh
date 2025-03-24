@@ -98,16 +98,27 @@ OUTPUT_DIR="$PACKAGE_DIR/usr/share/icons/hicolor"
 if command -v convert &>/dev/null; then
     ICON_SIZES=(16 32 48 64 128 256)
     for size in "${ICON_SIZES[@]}"; do
+        target_dir="${OUTPUT_DIR}/${size}x${size}/apps"
+        mkdir -p "$target_dir"
+        
         # Skip if the source is already the right size
         if [ "$size" -eq 256 ] && [[ "$SOURCE_ICON" == *"256"* ]]; then
-            target_dir="${OUTPUT_DIR}/${size}x${size}/apps"
-            cp "$SOURCE_ICON" "$target_dir/$APP_NAME.png"
+            cp "$SOURCE_ICON" "$target_dir/cursor.png"
             echo "Copied original 256x256 icon to $target_dir/cursor.png"
         else
-            target_dir="${OUTPUT_DIR}/${size}x${size}/apps"
             convert "$SOURCE_ICON" -resize ${size}x${size} "$target_dir/cursor.png"
             echo "Created ${size}x${size} icon at $target_dir/cursor.png"
         fi
+    done
+else
+    echo "Warning: ImageMagick not found. Icons will not be resized."
+    # Copy the original icon to all sizes as a fallback
+    ICON_SIZES=(16 32 48 64 128 256)
+    for size in "${ICON_SIZES[@]}"; do
+        target_dir="${OUTPUT_DIR}/${size}x${size}/apps"
+        mkdir -p "$target_dir"
+        cp "$SOURCE_ICON" "$target_dir/cursor.png"
+        echo "Copied original icon to $target_dir/cursor.png"
     done
 fi
 
