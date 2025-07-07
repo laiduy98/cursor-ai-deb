@@ -3,6 +3,8 @@ name: Build Debian Package
 on:
   push:
   workflow_dispatch:
+  schedule:
+    - cron: '0 0 * * 1,4' # every Monday and Thursday at 00:00 UTC
 
 jobs:
   build:
